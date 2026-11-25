@@ -14,6 +14,7 @@ object Config {
     const val KEY_ARTIST = 2u
     const val KEY_TITLE = 3u
     const val KEY_VOLUME = 4u
+    const val KEY_SOURCE = 5u
 
     // Values of COMMAND sent by the watch.
     const val CMD_PREV = 1
@@ -48,5 +49,6 @@ object Prefs {
 object NowPlaying {
     @Volatile var title: String = ""
     @Volatile var artist: String = ""
+    @Volatile var source: String = ""
     @Volatile var onChanged: (() -> Unit)? = null
 }

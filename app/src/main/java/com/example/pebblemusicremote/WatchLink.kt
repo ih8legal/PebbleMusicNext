@@ -36,6 +36,7 @@ object WatchLink {
             mapOf(
                 Config.KEY_TITLE to PebbleDictionaryItem.Text(trim(NowPlaying.title)),
                 Config.KEY_ARTIST to PebbleDictionaryItem.Text(trim(NowPlaying.artist)),
+                Config.KEY_SOURCE to PebbleDictionaryItem.Text(trim(NowPlaying.source)),
             ),
         )
     }
@@ -48,6 +49,7 @@ object WatchLink {
                 Config.KEY_THEME to PebbleDictionaryItem.UInt8(Prefs.getTheme(context).toUByte()),
                 Config.KEY_TITLE to PebbleDictionaryItem.Text(trim(NowPlaying.title)),
                 Config.KEY_ARTIST to PebbleDictionaryItem.Text(trim(NowPlaying.artist)),
+                Config.KEY_SOURCE to PebbleDictionaryItem.Text(trim(NowPlaying.source)),
                 Config.KEY_VOLUME to PebbleDictionaryItem.UInt8(VolumeControl.percent(context).toUByte()),
             ),
         )

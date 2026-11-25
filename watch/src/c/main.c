@@ -23,6 +23,7 @@
 #define KEY_ARTIST  2
 #define KEY_TITLE   3
 #define KEY_VOLUME  4
+#define KEY_SOURCE  5
 
 #define CMD_PREV       1
 #define CMD_PLAY_PAUSE 2
@@ -66,7 +67,6 @@ static TextLayer *s_artist_layer;
 static TextLayer *s_status_layer;
 static Layer *s_buttons_layer;
 static Layer *s_volume_layer;
-static AppTimer *s_clear_timer;
 static AppTimer *s_press_timer;
 static AppTimer *s_sync_timer;
 static AppTimer *s_repeat_timer;
@@ -77,6 +77,7 @@ static int s_theme = DEFAULT_THEME;
 
 static char s_title_buf[128] = "Not playing";
 static char s_artist_buf[128] = "";
+static char s_source_buf[64] = "";  // name of the app playing the media
 
 // Icon shapes, relative to the point they are moved to.
 static GPoint s_left_pts[3]  = {{6, -6}, {6, 6}, {-5, 0}};
@@ -185,9 +186,12 @@ static void set_now_playing(const char *title, const char *artist) {
 
 // ---------- Status line ----------
 
+static AppTimer *s_clear_timer;
+
 static void clear_status(void *data) {
   s_clear_timer = NULL;
-  text_layer_set_text(s_status_layer, "");
+  // Fall back to showing which app is playing.
+  text_layer_set_text(s_status_layer, s_source_buf);
 }
 
 static void show_status(const char *text) {
@@ -340,6 +344,15 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
                     artist_tuple ? artist_tuple->value->cstring : "");
   }
 
+  Tuple *source_tuple = dict_find(iter, KEY_SOURCE);
+  if (source_tuple) {
+    snprintf(s_source_buf, sizeof(s_source_buf), "%s", source_tuple->value->cstring);
+    // Don't overwrite a button message that is currently showing.
+    if (s_status_layer && !s_clear_timer) {
+      text_layer_set_text(s_status_layer, s_source_buf);
+    }
+  }
+
   Tuple *volume_tuple = dict_find(iter, KEY_VOLUME);
   if (volume_tuple) {
     set_volume((int) volume_tuple->value->uint8);
@@ -441,6 +454,7 @@ static void window_load(Window *window) {
 
   text_layer_set_text(s_title_layer, s_title_buf);
   text_layer_set_text(s_artist_layer, s_artist_buf);
+  text_layer_set_text(s_status_layer, s_source_buf);
 
   s_tri_left = gpath_create(&s_left_info);
   s_tri_right = gpath_create(&s_right_info);

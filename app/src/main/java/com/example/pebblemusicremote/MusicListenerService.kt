@@ -89,6 +89,18 @@ class MusicListenerService : NotificationListenerService() {
         refresh()
     }
 
+    /** Human-readable name of the app that owns the media session. */
+    private fun appLabel(packageName: String?): String {
+        if (packageName.isNullOrEmpty()) return ""
+        return try {
+            val info = packageManager.getApplicationInfo(packageName, 0)
+            packageManager.getApplicationLabel(info).toString()
+        } catch (e: Exception) {
+            Log.w(TAG, "No label for $packageName", e)
+            packageName
+        }
+    }
+
     private fun refresh() {
         val c = controller
         Log.d(TAG, "refresh: pkg=${c?.packageName} state=${c?.playbackState?.state} title=${c?.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)}")
@@ -102,11 +114,14 @@ class MusicListenerService : NotificationListenerService() {
             (metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST)
                 ?: metadata?.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST)).orEmpty()
 
-        if (title == NowPlaying.title && artist == NowPlaying.artist) {
+        val source = if (inactive) "" else appLabel(c?.packageName)
+
+        if (title == NowPlaying.title && artist == NowPlaying.artist && source == NowPlaying.source) {
             return
         }
         NowPlaying.title = title
         NowPlaying.artist = artist
+        NowPlaying.source = source
         NowPlaying.onChanged?.invoke()
         WatchLink.sendNowPlaying(this)
     }
