@@ -1,0 +1,47 @@
+{
+    "author": "ih8legal@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "musicnext",
+    "pebble": {
+        "companionApp": {
+            "android": {
+                "apps": [
+                    {
+                        "package": "com.example.pebblemusicremote"
+                    }
+                ],
+                "url": "https://github.com/pebble-dev/PebbleKitAndroid2"
+            }
+        },
+        "displayName": "MusicNext",
+        "enableMultiJS": true,
+        "manifestVersion": 2,
+        "messageKeys": {
+            "ARTIST": 2,
+            "COMMAND": 0,
+            "THEME": 1,
+            "TITLE": 3
+        },
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk",
+            "diorite",
+            "emery",
+            "gabbro",
+            "flint"
+        ],
+        "usesPermissions": [],
+        "uuid": "55299c65-7599-4d66-9887-8394c435cfef",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}

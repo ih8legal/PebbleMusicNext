@@ -1,0 +1,47 @@
+name: Pebble watch app build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install system libraries
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-2.0-0 libglib2.0-0 libpixman-1-0 zlib1g
+
+      - name: Install Pebble tool and SDK
+        run: |
+          uv tool install pebble-tool --python 3.12
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          pebble sdk install latest
+
+      - name: Build
+        working-directory: watch
+        run: pebble build
+
+      - name: Show companion link in built appinfo
+        working-directory: watch
+        run: unzip -p build/*.pbw appinfo.json | grep -A6 companionApp || echo "companionApp missing"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MusicNext-pbw
+          path: watch/build/*.pbw
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: watch/build/*.pbw

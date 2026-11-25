@@ -10,3 +10,10 @@ Android companion app for a Pebble watch app that controls phone music playback 
 The watch app is written in C (CloudPebble). Its `package.json` must declare this app under
 `pebble.companionApp.android` with package `com.example.pebblemusicremote`, and its UUID must
 match `APP_UUID` in `Config.kt`.
+
+## Layout
+
+- `app/` – Android companion app (`./gradlew assembleDebug`)
+- `watch/` – Pebble watch app in C (`pebble build`)
+- `.github/workflows/` – CI builds both; the APK and `.pbw` are uploaded as artifacts on every push.
+  Push a tag like `v1.0.0` to attach the `.pbw` to a GitHub release.
