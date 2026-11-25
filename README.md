@@ -17,3 +17,10 @@ match `APP_UUID` in `Config.kt`.
 - `watch/` – Pebble watch app in C (`pebble build`)
 - `.github/workflows/` – CI builds both; the APK and `.pbw` are uploaded as artifacts on every push.
   Push a tag like `v1.0.0` to attach the `.pbw` to a GitHub release.
+
+## MusicNext app
+
+Two sections, switched from the bar at the bottom:
+
+- **Main** – what's playing (and in which app), and the watch app's theme.
+- **Settings** – notification access, about, and a collapsed "Debug tools" panel.

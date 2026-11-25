@@ -316,9 +316,8 @@ static void send_command(int32_t command, const char *label) {
     show_status("Busy, try again");
   } else if (result != APP_MSG_OK) {
     show_status("Send failed");
-  } else {
-    show_status(label);
   }
+  // No message on success: the icon flash is enough feedback.
 }
 
 static void sync_timer_callback(void *data) {

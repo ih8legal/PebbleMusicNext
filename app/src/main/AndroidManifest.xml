@@ -9,9 +9,11 @@
 
     <application
         android:allowBackup="true"
-        android:label="Pebble Music Remote"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:theme="@style/Theme.MusicNext">
 
         <activity
             android:name=".MainActivity"
@@ -36,7 +38,7 @@
         <service
             android:name=".MusicListenerService"
             android:exported="true"
-            android:label="Pebble Music Remote"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
