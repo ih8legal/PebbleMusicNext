@@ -14,9 +14,28 @@ android {
         versionName = "1.0"
     }
 
+    // Release signing comes from environment variables (set by GitHub Actions from
+    // repository secrets, or exported locally). Without them, release stays unsigned.
+    val keystorePath = System.getenv("KEYSTORE_FILE")
+    val hasSigning = keystorePath != null && file(keystorePath).exists()
+
+    signingConfigs {
+        if (hasSigning) {
+            create("release") {
+                storeFile = file(keystorePath!!)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            if (hasSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
